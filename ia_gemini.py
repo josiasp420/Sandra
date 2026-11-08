@@ -26,6 +26,7 @@ def load_history():
                 "role": role,
                 "parts": [{"text": text}]
             })
+            print(text)
     return history
 
 
@@ -38,6 +39,11 @@ def chat(prompt):
     global history
     # user
     cc=10
+    history.append({
+    "role": "user",
+    "parts": [{"text": prompt}]
+    })
+
     while (cc):
         try:
             response = client.models.generate_content(
@@ -52,13 +58,9 @@ def chat(prompt):
             if (cc == 0):
                 print("Falhou infelizmente")
                 return (None)
+                history.pop(-1)
 
 
-    history.append({
-        "role": "user",
-        "parts": [{"text": prompt}]
-    })
-    
     answer = response.text
     # model
     history.append({
@@ -71,10 +73,21 @@ def chat(prompt):
 
 
 history = load_history()
-for tdi in history:
-    print(tdi,'\n\n\n\n')
+#for tdi in history:
+#    print(tdi,'\n\n\n\n')
 #for td in range(0,2):
 #     msg = input("Você: ")
 #     print("IA:", chat(msg))
+
+
+
+
+
+
+
+
+
+
+
 
 
