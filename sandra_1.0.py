@@ -10,16 +10,14 @@ class Program(CTk):
 		self.width = width
 		self.height = height
 
+		self.frame = CTkFrame(self,width=1,height=1)
+		self.frame.pack(side=RIGHT,fill=BOTH,expand=True,ipadx=20)
 		self.bottom()
 		self.top()
-		self.load_all_promts()
-
-		# self.user_message("So tentando uma coisa")
-		# self.ia_message("So respondendo uma coisa a mais")
-
+		self.left_menu()
 
 	def bottom(self):
-		self.base_frame = CTkFrame(self,width=1,height=70)
+		self.base_frame = CTkFrame(self.frame,width=1,height=70)
 		self.entry = CTkTextbox(self.base_frame,height=50,font=("Arial",15))
 		self.btn = CTkButton(self.base_frame,text="San.",width=40,fg_color="green",command=self.create_prompt,font=("Arial",15));
 
@@ -28,16 +26,20 @@ class Program(CTk):
 		self.btn.pack(side=RIGHT,padx=10)
 
 	def top(self):
-		self.body_frame = CTkScrollableFrame(self,width=1,height=1,fg_color="gray",corner_radius=0)
-		#base = CTkScrollbar(self.body_frame,height=200)
-		self.body_frame.pack(side=TOP,fill=BOTH,expand=True,padx=20,pady=5)
-
-	def load_all_promts(self):
+		self.body_frame = CTkScrollableFrame(self.frame,width=1,height=1,fg_color="gray",corner_radius=0)
+		self.body_frame.pack(side=TOP,fill=BOTH,expand=True,padx=10,pady=5)
+		self.body_frame._scrollbar.grid_forget()
 		for sender,msg in LIST_PROMPTS:
 			if (sender == "user"):
 				self.user_message(msg)
 			else:
 				self.ia_message(msg)
+		self.body_frame._parent_canvas.yview_moveto(1.0)
+		
+	def left_menu(self):
+		self.leftm = CTkScrollableFrame(self,width=150,fg_color="gray",corner_radius=5)
+		self.leftm.pack(side=LEFT,fill=Y,pady=10)
+		self.leftm._scrollbar.grid_forget()
 
 	def create_prompt(self):
 		msg = self.entry.get("0.0",END)
@@ -62,7 +64,6 @@ class Program(CTk):
 		thing = chat(msg)
 		if (thing):
 			self.ia_message(thing)
-
 
 prog = Program("Sandra",800,800)
 prog.mainloop()
