@@ -1,5 +1,6 @@
 from customtkinter import *
 from ia_gemini import *
+from ia_gemini import LIST_PROMPTS
 
 class Program(CTk):
 	def __init__(self,title,width,height):
@@ -11,6 +12,8 @@ class Program(CTk):
 
 		self.bottom()
 		self.top()
+		self.load_all_promts()
+
 		# self.user_message("So tentando uma coisa")
 		# self.ia_message("So respondendo uma coisa a mais")
 
@@ -28,6 +31,13 @@ class Program(CTk):
 		self.body_frame = CTkScrollableFrame(self,width=1,height=1,fg_color="gray",corner_radius=0)
 		#base = CTkScrollbar(self.body_frame,height=200)
 		self.body_frame.pack(side=TOP,fill=BOTH,expand=True,padx=20,pady=5)
+
+	def load_all_promts(self):
+		for sender,msg in LIST_PROMPTS:
+			if (sender == "user"):
+				self.user_message(msg)
+			else:
+				self.ia_message(msg)
 
 	def create_prompt(self):
 		msg = self.entry.get("0.0",END)

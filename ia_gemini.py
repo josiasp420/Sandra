@@ -5,6 +5,7 @@ import os
 dotenv.load_dotenv()
 client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 FILE = "chat.txt"
+LIST_PROMPTS:list[(str,str)] = []
 
 # 🔥 carregar histórico com segurança
 def load_history():
@@ -26,13 +27,21 @@ def load_history():
                 "role": role,
                 "parts": [{"text": text}]
             })
-            print(text)
+    with open(FILE, "r", encoding="utf-8") as f:
+        data = f.read()
+        for td in data.split("__enum_prompt"):
+            td = td.strip()
+            if (td[:5] == "user:"):
+                LIST_PROMPTS.append(("user",td))
+            elif (td[:6] == "model:"):
+                LIST_PROMPTS.append(("model",td))
     return history
 
 
 def save_message(role, text):
     with open(FILE, "a", encoding="utf-8") as f:
         f.write(f"{role}: {text}\n")
+        f.write("__enum_prompt\n")
 
 
 def chat(prompt):
@@ -62,7 +71,6 @@ def chat(prompt):
 
 
     answer = response.text
-    # model
     history.append({
         "role": "model",
         "parts": [{"text": answer}]
@@ -73,21 +81,3 @@ def chat(prompt):
 
 
 history = load_history()
-#for tdi in history:
-#    print(tdi,'\n\n\n\n')
-#for td in range(0,2):
-#     msg = input("Você: ")
-#     print("IA:", chat(msg))
-
-
-
-
-
-
-
-
-
-
-
-
-
