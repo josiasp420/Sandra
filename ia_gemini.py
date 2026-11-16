@@ -8,7 +8,7 @@ client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 class chatIa:
     def __init__(self,id:int):
         self.id = id
-        self.FILE = f"/chat_{self.id}.txt"
+        self.FILE = f"chats/chat_{self.id}.txt"
         self.LIST_PROMPTS:list[(str,str)] = []
         self.history = self.load_history()
 
